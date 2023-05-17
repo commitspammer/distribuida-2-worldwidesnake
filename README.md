@@ -20,7 +20,7 @@ POST /game/snakes
 
 ```ts
 {
-  name: string
+  name: string,
 }
 ```
 
@@ -29,24 +29,10 @@ POST /game/snakes
 
 ```ts
 {
-  name: string
-  token: string
+  name: string,
+  token: string,
 }
 ```
-
-### Unregister snake
-
-Unregisters an existing snake.
-Fails if that snake isn't registered.
-
-**Endpoint**:
-
-```ts
-DELETE /game/snakes?token={token}
-```
-
-**Returns**:
-204 NO CONTENT
 
 ### Subscribe for game states
 
@@ -132,3 +118,17 @@ PUT /game/snakes/{name}?token={token}
   facing: string,
 }
 ```
+
+### Unregister snake
+
+Unregisters an existing snake.
+Fails if that snake isn't registered.
+
+**Endpoint**:
+
+```ts
+DELETE /game/snakes/{name}?token={token}
+```
+
+**Returns**:
+204 NO CONTENT
