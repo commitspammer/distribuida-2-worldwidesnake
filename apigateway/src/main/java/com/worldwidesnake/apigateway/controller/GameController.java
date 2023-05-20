@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.worldwidesnake.apigateway.service.SnakeGameService;
 import com.worldwidesnake.apigateway.model.dto.PlayerDTO;
+import com.worldwidesnake.apigateway.model.dto.SnakeDTO;
+import com.worldwidesnake.apigateway.model.dto.SnakeConfigDTO;
 import com.worldwidesnake.apigateway.model.dto.LinkDTO;
 
 @RestController
@@ -34,6 +36,11 @@ public class GameController {
 	@GetMapping("/events")
 	public LinkDTO getEvents() {
 		return snakeGameService.getStateEventsLink();
+	}
+
+	@PutMapping("/snakes/{name}")
+	public SnakeDTO putSnake(@PathVariable String name, @RequestBody SnakeConfigDTO config) {
+		return snakeGameService.redirectSnake(name, config.facing());
 	}
 
 }
