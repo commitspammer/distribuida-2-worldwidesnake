@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.worldwidesnake.apigateway.service.SnakeGameService;
 import com.worldwidesnake.apigateway.model.dto.PlayerDTO;
+import com.worldwidesnake.apigateway.model.dto.LinkDTO;
 
 @RestController
 @RequestMapping("/game")
@@ -25,9 +26,14 @@ public class GameController {
 	}
 
 	@PostMapping("/snakes")
-	public PlayerDTO post(@RequestBody PlayerDTO player) {
+	public PlayerDTO postSnake(@RequestBody PlayerDTO player) {
 		snakeGameService.registerSnake(player.name());
 		return new PlayerDTO(player.name(), "BIGGER");
+	}
+
+	@GetMapping("/events")
+	public LinkDTO getEvents() {
+		return snakeGameService.getStateEventsLink();
 	}
 
 }

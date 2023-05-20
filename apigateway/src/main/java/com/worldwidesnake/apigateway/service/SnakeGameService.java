@@ -14,6 +14,7 @@ import com.worldwidesnake.apigateway.model.dto.GameConfigDTO;
 import com.worldwidesnake.apigateway.model.dto.GameStateDTO;
 import com.worldwidesnake.apigateway.model.dto.PlayerDTO;
 import com.worldwidesnake.apigateway.model.dto.SnakeDTO;
+import com.worldwidesnake.apigateway.model.dto.LinkDTO;
 
 @Service
 public class SnakeGameService {
@@ -49,6 +50,10 @@ public class SnakeGameService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public LinkDTO getStateEventsLink() {
+		return new LinkDTO(globalGameURL + "/events", "GET", "text/event-stream");
 	}
 
 //	public String retrieveNickname(String token) {
