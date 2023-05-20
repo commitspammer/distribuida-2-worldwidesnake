@@ -1,36 +1,60 @@
 import kaboom from "kaboom";
 
 kaboom({
-  background: [28, 26, 28, 1],
+  background: [0, 0, 0, 1],
 });
 
 const API_URL = "http://localhost:8080";
 const block_size = 20;
 
 scene("main", () => {
-  const gameEvents = new EventSource(`${API_URL}/game/events`);
+  async function routeGetter() {
+    const response = await fetch(API_URL + "/game/events", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  gameEvents.addEventListener("newState", (e) => {
-    const state = JSON.parse(e.data);
-    updateGameScene(state);
-  });
+    if (!response.ok) {
+      throw new Error("Failed to send data to the API.");
+    }
+
+    const route = await response.json();
+    return route;
+  }
+
+  let gameEvents;
+
+  const teste = routeGetter()
+    .then((response) => {
+      gameEvents = new EventSource(response.href);
+
+      gameEvents.addEventListener("newState", (e) => {
+        const state = JSON.parse(e.data);
+        updateGameScene(state);
+      });
+    })
+    .catch((error) => {
+      error;
+    });
 
   function createBoard(height, width) {
     const board = [];
 
-    const topWall = "=".repeat(width + 2);
+    const topWall = "=".repeat(width);
     board.push(topWall);
 
-    for (let row = 1; row < height + 1; row++) {
+    for (let row = 1; row < height - 1; row++) {
       let rowString = "=";
-      for (let col = 1; col < width + 1; col++) {
+      for (let col = 1; col < width - 1; col++) {
         rowString += " ";
       }
       rowString += "=";
       board.push(rowString);
     }
 
-    const bottomWall = "=".repeat(width + 2);
+    const bottomWall = "=".repeat(width);
     board.push(bottomWall);
 
     return board;
@@ -48,12 +72,17 @@ scene("main", () => {
     const map = addLevel(createBoard(rows, cols), {
       width: block_size,
       height: block_size,
-      pos: vec2(0, 0),
       "=": () => [
         rect(block_size, block_size),
-        color(255, 0, 0),
+        color(28, 26, 28),
         area(),
         "wall",
+      ],
+      " ": () => [
+        rect(block_size, block_size),
+        color(28, 26, 28),
+        area(),
+        "free",
       ],
     });
   }
@@ -97,37 +126,6 @@ scene("main", () => {
       ]);
     });
   }
-
-  const mockState = {
-    rows: 35,
-    cols: 35,
-    snakes: [
-      {
-        name: "snake1",
-        head: { x: 5, y: 5 },
-        tail: [
-          { x: 4, y: 5 },
-          { x: 3, y: 5 },
-        ],
-        facing: "right",
-      },
-      {
-        name: "snake2",
-        head: { x: 10, y: 15 },
-        tail: [
-          { x: 10, y: 16 },
-          { x: 10, y: 17 },
-        ],
-        facing: "up",
-      },
-    ],
-    foods: [
-      { x: 8, y: 8 },
-      { x: 12, y: 20 },
-    ],
-  };
-
-  updateGameScene(mockState);
 });
 
 scene("login", () => {
@@ -170,7 +168,8 @@ scene("login", () => {
   onKeyPressRepeat("enter", () => {
     postData(input.text)
       .then((response) => {
-        console.log("API response:", response);
+        sessionStorage.setItem("token", response.token);
+        sessionStorage.setItem("name", response.name);
         go("main");
       })
       .catch((error) => {
