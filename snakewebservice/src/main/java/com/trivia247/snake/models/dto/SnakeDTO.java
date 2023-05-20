@@ -3,7 +3,7 @@ package com.trivia247.snake.models.dto;
 import java.util.List;
 
 public record SnakeDTO(
-		String playerName,
+		String name,
 		PosDTO head,
 		List<PosDTO> tail,
 		String facing
