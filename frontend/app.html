@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Funny Page</title>
+  <style>
+    body {
+      background-color: #FEDCBD;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    h1 {
+      font-size: 40px;
+      color: #FF6F61;
+      margin-bottom: 20px;
+    }
+
+    #funny-image {
+      width: 200px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #888888;
+    }
+
+    #funny-button {
+      padding: 10px 20px;
+      background-color: #FF6F61;
+      color: white;
+      border-radius: 5px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to the Funny Page!</h1>
+  <img id="funny-image" src="https://example.com/funny-image.jpg" alt="Funny Image">
+  <br>
+  <button id="funny-button" onclick="tellJoke()">Tell me a joke!</button>
+
+  <script>
+    function tellJoke() {
+      var jokes = [
+        "Why don't scientists trust atoms? Because they make up everything!",
+        "Why don't skeletons fight each other? They don't have the guts!",
+        "Why don't eggs tell jokes? Because they might crack up!",
+        "Why did the scarecrow win an award? Because he was outstanding in his field!",
+        "Why did the bicycle fall over? Because it was two-tired!"
+      ];
+      var randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+      alert(randomJoke);
+    }
+  </script>
+</body>
+</html>
+
