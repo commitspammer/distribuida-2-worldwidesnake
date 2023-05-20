@@ -12,6 +12,8 @@ import org.springframework.http.HttpMethod;
 
 import com.worldwidesnake.apigateway.model.dto.GameConfigDTO;
 import com.worldwidesnake.apigateway.model.dto.GameStateDTO;
+import com.worldwidesnake.apigateway.model.dto.PlayerDTO;
+import com.worldwidesnake.apigateway.model.dto.SnakeDTO;
 
 @Service
 public class SnakeGameService {
@@ -33,6 +35,19 @@ public class SnakeGameService {
  			this.globalGameURL = baseURL + "/games/" + state.id();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public SnakeDTO registerSnake(String name) {
+		PlayerDTO player = new PlayerDTO(name, null);
+		String url = globalGameURL + "/snakes";
+		HttpEntity<PlayerDTO> req = new HttpEntity<>(player);
+		try {
+			SnakeDTO snake = restTemplate.postForObject(url, req, SnakeDTO.class);
+			return snake;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 

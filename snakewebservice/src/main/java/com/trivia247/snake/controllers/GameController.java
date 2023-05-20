@@ -17,6 +17,7 @@ import com.trivia247.snake.models.dto.GameStateDTO;
 import com.trivia247.snake.models.dto.GameConfigDTO;
 import com.trivia247.snake.models.dto.SnakeDTO;
 import com.trivia247.snake.models.dto.SnakeConfigDTO;
+import com.trivia247.snake.models.dto.PlayerDTO;
 
 @RestController
 @RequestMapping("/games")
@@ -38,6 +39,11 @@ public class GameController {
 	@GetMapping("/{id}/events")
 	public SseEmitter subscribe(@PathVariable Integer id) {
 		return gameService.getGameSseEmitterById(id);
+	}
+
+	@PostMapping("{id}/snakes")
+	public SnakeDTO postSnake(@PathVariable Integer id, @RequestBody PlayerDTO playerDTO) {
+		return gameService.addSnake(id, playerDTO);
 	}
 
 	@PutMapping("{id}/snakes/{name}")

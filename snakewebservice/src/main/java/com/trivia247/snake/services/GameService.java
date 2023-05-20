@@ -12,6 +12,7 @@ import com.trivia247.snake.models.dto.GameStateDTO;
 import com.trivia247.snake.models.dto.GameConfigDTO;
 import com.trivia247.snake.models.dto.SnakeDTO;
 import com.trivia247.snake.models.dto.SnakeConfigDTO;
+import com.trivia247.snake.models.dto.PlayerDTO;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -21,7 +22,7 @@ public class GameService {
 
 	private Map<Integer, GameState> games = new HashMap<>();
 	private Map<Integer, SseEmitter> emitters = new HashMap<>();
-	private Map<String, String> tokensToPlayers = new HashMap<>(); //no use yet
+	//private Map<String, String> tokensToPlayers = new HashMap<>(); //no use yet
 	private Ticker ticker;
 
 	public GameService() {
@@ -45,6 +46,15 @@ public class GameService {
 	public GameStateDTO getGameById(Integer id) {
 		try {
 			return games.get(id).toDTO().withId(id);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public SnakeDTO addSnake(Integer gameId, PlayerDTO player) {
+		try {
+			games.get(gameId).addSnake(player.name());
+			return games.get(gameId).snakeDTO(player.name());
 		} catch (Exception e) {
 			return null;
 		}
