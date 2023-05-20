@@ -32,14 +32,12 @@ scene("main", () => {
 
       gameEvents.addEventListener("newState", (e) => {
         const state = JSON.parse(e.data);
-        console.log(state);
         updateGameScene(state);
       });
     })
     .catch((error) => {
       error;
     });
-  console.log(teste);
 
   function createBoard(height, width) {
     const board = [];
@@ -128,37 +126,6 @@ scene("main", () => {
       ]);
     });
   }
-
-  // const mockState = {
-  //   rows: 35,
-  //   cols: 35,
-  //   snakes: [
-  //     {
-  //       name: "snake1",
-  //       head: { x: 5, y: 5 },
-  //       tail: [
-  //         { x: 4, y: 5 },
-  //         { x: 3, y: 5 },
-  //       ],
-  //       facing: "right",
-  //     },
-  //     {
-  //       name: "snake2",
-  //       head: { x: 10, y: 15 },
-  //       tail: [
-  //         { x: 10, y: 16 },
-  //         { x: 10, y: 17 },
-  //       ],
-  //       facing: "up",
-  //     },
-  //   ],
-  //   foods: [
-  //     { x: 8, y: 8 },
-  //     { x: 12, y: 20 },
-  //   ],
-  // };
-
-  // updateGameScene(mockState);
 });
 
 scene("login", () => {
