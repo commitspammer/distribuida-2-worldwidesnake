@@ -98,7 +98,7 @@ Returns that snakes' information after updating.
 **Endpoint**:
 
 ```ts
-PUT /game/snakes/{name}?token={token}    /***token auth not yet implemented***/
+PUT /game/snakes/{name}
 ```
 
 **Parameters**:
@@ -137,7 +137,7 @@ Fails if that snake isn't registered.
 **Endpoint**:
 
 ```ts
-DELETE /game/snakes/{name}?token={token}    /***token auth not yet implemented***/
+DELETE /game/snakes/{name}
 ```
 
 **Returns**:
