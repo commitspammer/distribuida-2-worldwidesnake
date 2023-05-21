@@ -21,7 +21,7 @@ public class UsernameController {
         this.usernameService = usernameService;
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<UsernameDTO> addUsername(@RequestBody UsernameDTO usernameRequest) {
         try {
             UsernameDTO response = usernameService.addUsername(usernameRequest.getUsername());

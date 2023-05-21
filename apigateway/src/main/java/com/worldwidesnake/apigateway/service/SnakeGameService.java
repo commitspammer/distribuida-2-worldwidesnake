@@ -75,31 +75,4 @@ public class SnakeGameService {
 		}
 	}
 
-//	public String retrieveNickname(String token) {
-//		String url = baseURL + "/nicknames/" + token;
-//		try {
-//			NicknameDTO nicknameDTO = restTemplate.getForObject(url, NicknameDTO.class);
-//			return nicknameDTO.nickname();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//	}
-//
-//	public String unregisterNickname(String token) {
-//		String url = baseURL + "/nicknames/" + token;
-//		try {
-//			ResponseEntity<NicknameDTO> resp = restTemplate.exchange(
-//					url,
-//					HttpMethod.DELETE,
-//					HttpEntity.EMPTY,
-//					NicknameDTO.class
-//			);
-//			return resp.getBody().nickname();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//	}
-
 }
