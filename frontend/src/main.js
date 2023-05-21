@@ -45,6 +45,25 @@ scene("main", () => {
     return response.json();
   }
 
+  async function unregisterSnake() {
+    const response = await fetch(
+      API_URL + "/game/snakes/" + sessionStorage.getItem("name"),
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(response.ok);
+
+    if (!response.ok) {
+      throw new Error("Failed to send data to the API.");
+    }
+
+    return response.ok;
+  }
+
   let gameEvents;
   const teste = routeGetter()
     .then((response) => {
@@ -157,6 +176,24 @@ scene("main", () => {
     });
   }
 
+  const nameText = add([
+    text("World Wide SNAKE", {
+      width: width() - 24 * 2,
+      size: 48,
+      align: "center",
+      lineSpacing: 15,
+      letterSpacing: 1,
+      transform: (idx, ch) => ({
+        color: hsl2rgb((time() * 0.2 + idx * 0.1) % 1, 0.7, 0.8),
+        pos: vec2(0, wave(-4, 4, time() * 4 + idx * 0.5)),
+        scale: wave(1, 1.2, time() * 3 + idx),
+        angle: wave(-9, 9, time() * 3 + idx),
+      }),
+    }),
+    pos(width() / 2, height() / 2 - 50),
+    origin("center"),
+  ]);
+
   onKeyPress("left", () => {
     redirectSnake("WEST");
   });
@@ -168,6 +205,88 @@ scene("main", () => {
   });
   onKeyPress("down", () => {
     redirectSnake("NORTH");
+  });
+
+  onKeyPress("escape", () => {
+    unregisterSnake()
+      .then((response) => {
+        go("logout");
+      })
+      .catch((error) => {
+        go("main");
+      });
+  });
+});
+
+async function postData(name) {
+  const response = await fetch(API_URL + "/game/snakes", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: name,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to send data to the API.");
+  }
+
+  return response.json();
+}
+
+scene("logout", () => {
+  let curSize = 48;
+  const pad = 24;
+
+  const nameText = add([
+    text("You left the game! \n To log again, enter your name:", {
+      width: width() - pad * 2,
+      size: curSize,
+      align: "center",
+      lineSpacing: 15,
+      letterSpacing: 1,
+      transform: (idx, ch) => ({
+        color: hsl2rgb((time() * 0.2 + idx * 0.1) % 1, 0.7, 0.8),
+        pos: vec2(0, wave(-4, 4, time() * 4 + idx * 0.5)),
+        scale: wave(1, 1.2, time() * 3 + idx),
+        angle: wave(-9, 9, time() * 3 + idx),
+      }),
+    }),
+    pos(width() / 2, height() / 2 - 50),
+    origin("center"),
+  ]);
+
+  const input = add([
+    pos(width() / 2, height() / 2 + 50),
+    origin("center"),
+    text([], {
+      width: width() - pad * 2,
+      size: curSize,
+      align: "center",
+      lineSpacing: 10,
+      letterSpacing: 1,
+    }),
+  ]);
+  onCharInput((ch) => {
+    input.text += ch;
+  });
+
+  onKeyPressRepeat("enter", () => {
+    postData(input.text)
+      .then((response) => {
+        sessionStorage.setItem("token", response.token);
+        sessionStorage.setItem("name", response.name);
+        go("main");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  });
+
+  onKeyPressRepeat("backspace", () => {
+    input.text = input.text.substring(0, input.text.length - 1);
   });
 });
 
@@ -217,31 +336,12 @@ scene("login", () => {
       })
       .catch((error) => {
         console.error("Error:", error);
-        go("main");
       });
   });
 
   onKeyPressRepeat("backspace", () => {
     input.text = input.text.substring(0, input.text.length - 1);
   });
-
-  async function postData(name) {
-    const response = await fetch(API_URL + "/game/snakes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to send data to the API.");
-    }
-
-    return response.json();
-  }
 });
 
 go("login");
