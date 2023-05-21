@@ -24,8 +24,28 @@ scene("main", () => {
     return route;
   }
 
-  let gameEvents;
+  async function redirectSnake(direction) {
+    const response = await fetch(
+      API_URL + "/game/snakes/" + sessionStorage.getItem("name"),
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          facing: direction,
+        }),
+      }
+    );
 
+    if (!response.ok) {
+      throw new Error("Failed to send data to the API.");
+    }
+
+    return response.json();
+  }
+
+  let gameEvents;
   const teste = routeGetter()
     .then((response) => {
       gameEvents = new EventSource(response.href);
@@ -93,10 +113,16 @@ scene("main", () => {
     snakes.forEach((snake) => {
       const { name, head, tail, facing } = snake;
 
+      const isCurrentPlayer = name === sessionStorage.getItem("name");
+
       const snakeHead = add([
         rect(block_size, block_size),
         pos(head.x * block_size, head.y * block_size),
-        color(125, 124, 125),
+        color(
+          isCurrentPlayer ? 125 : 255,
+          isCurrentPlayer ? 124 : 0,
+          isCurrentPlayer ? 125 : 0
+        ),
         area(),
         { name: `snake-${name}-head`, type: "snake" },
       ]);
@@ -105,7 +131,11 @@ scene("main", () => {
         const snakeTail = add([
           rect(block_size, block_size),
           pos(tailSegment.x * block_size, tailSegment.y * block_size),
-          color(255, 255, 255),
+          color(
+            isCurrentPlayer ? 255 : 255,
+            isCurrentPlayer ? 255 : 255,
+            isCurrentPlayer ? 255 : 0
+          ),
           area(),
           { type: "snake" },
         ]);
@@ -128,16 +158,16 @@ scene("main", () => {
   }
 
   onKeyPress("left", () => {
-    console.log("left");
+    redirectSnake("WEST");
   });
   onKeyPress("right", () => {
-    console.log("right");
+    redirectSnake("EAST");
   });
   onKeyPress("up", () => {
-    console.log("up");
+    redirectSnake("SOUTH");
   });
   onKeyPress("down", () => {
-    console.log("down");
+    redirectSnake("NORTH");
   });
 });
 
