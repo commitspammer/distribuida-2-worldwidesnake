@@ -25,7 +25,7 @@ POST /game/snakes
 ```
 
 **Returns**:
-200 OK
+201 CREATED
 
 ```ts
 {
@@ -36,8 +36,9 @@ POST /game/snakes
 
 ### Subscribe for game states
 
-Allows listening to game state updates.
-Returns an endless text stream of "newState" events.
+Points to a link which allows listening to game state updates.
+Returns a hyperlink reference to a text stream endpoint.
+That endpoint then returns an endless text stream of "newState" events.
  
 **Endpoint**:
 
@@ -46,10 +47,19 @@ GET /game/events
 ```
 
 **Returns**:
+200 OK
+
+```ts
+{
+  href: string,
+  method: string,
+  type: string,
+}
+```
 Server-Sent Events
 
 ```ts
-event: "newState"
+event: newState
 data: {
   rows: number,
   cols: number,
@@ -88,7 +98,7 @@ Returns that snakes' information after updating.
 **Endpoint**:
 
 ```ts
-PUT /game/snakes/{name}?token={token}
+PUT /game/snakes/{name}?token={token}    /***token auth not yet implemented***/
 ```
 
 **Parameters**:
@@ -127,7 +137,7 @@ Fails if that snake isn't registered.
 **Endpoint**:
 
 ```ts
-DELETE /game/snakes/{name}?token={token}
+DELETE /game/snakes/{name}?token={token}    /***token auth not yet implemented***/
 ```
 
 **Returns**:
