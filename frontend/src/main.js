@@ -126,6 +126,19 @@ scene("main", () => {
       ]);
     });
   }
+
+  onKeyPress("left", () => {
+    console.log("left");
+  });
+  onKeyPress("right", () => {
+    console.log("right");
+  });
+  onKeyPress("up", () => {
+    console.log("up");
+  });
+  onKeyPress("down", () => {
+    console.log("down");
+  });
 });
 
 scene("login", () => {
