@@ -75,4 +75,9 @@ public class SnakeGameService {
 		}
 	}
 
+	public void unregisterSnake(String name) {
+		String url = globalGameURL + "/snakes/" + name;
+		restTemplate.delete(url);
+	}
+
 }

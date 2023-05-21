@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -43,12 +44,17 @@ public class GameController {
 
 	@PostMapping("{id}/snakes")
 	public SnakeDTO postSnake(@PathVariable Integer id, @RequestBody PlayerDTO playerDTO) {
-		return gameService.addSnake(id, playerDTO);
+		return gameService.addSnake(id, playerDTO.name());
 	}
 
 	@PutMapping("{id}/snakes/{name}")
 	public SnakeDTO putSnake(@PathVariable Integer id, @PathVariable String name, @RequestBody SnakeConfigDTO configDTO) {
 		return gameService.updateSnake(id, name, configDTO);
+	}
+
+	@DeleteMapping("{id}/snakes/{name}")
+	public void deleteSnake(@PathVariable Integer id, @PathVariable String name) {
+		gameService.removeSnake(id, name);
 	}
 
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -30,7 +31,7 @@ public class GameController {
 	@PostMapping("/snakes")
 	public PlayerDTO postSnake(@RequestBody PlayerDTO player) {
 		snakeGameService.registerSnake(player.name());
-		return new PlayerDTO(player.name(), "BIGGER");
+		return new PlayerDTO(player.name(), "token");
 	}
 
 	@GetMapping("/events")
@@ -41,6 +42,11 @@ public class GameController {
 	@PutMapping("/snakes/{name}")
 	public SnakeDTO putSnake(@PathVariable String name, @RequestBody SnakeConfigDTO config) {
 		return snakeGameService.redirectSnake(name, config.facing());
+	}
+
+	@DeleteMapping("/snakes/{name}")
+	public void deleteSnake(@PathVariable String name) {
+		snakeGameService.unregisterSnake(name);
 	}
 
 }

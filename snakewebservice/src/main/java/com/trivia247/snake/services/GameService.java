@@ -51,12 +51,19 @@ public class GameService {
 		}
 	}
 
-	public SnakeDTO addSnake(Integer gameId, PlayerDTO player) {
+	public SnakeDTO addSnake(Integer gameId, String snakeName) {
 		try {
-			games.get(gameId).addSnake(player.name());
-			return games.get(gameId).snakeDTO(player.name());
+			games.get(gameId).addSnake(snakeName);
+			return games.get(gameId).snakeDTO(snakeName);
 		} catch (Exception e) {
 			return null;
+		}
+	}
+
+	public void removeSnake(Integer gameId, String snakeName) {
+		try {
+			games.get(gameId).removeSnake(snakeName);
+		} catch (Exception e) {
 		}
 	}
 
