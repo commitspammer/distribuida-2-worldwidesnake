@@ -218,6 +218,10 @@ DELETE /usernames/{token}
 
 ### Create game
 
+Creates a new game instance.
+Fails if any of the configuration parameters are invalid.
+Returns the initial game state.
+
 **Endpoint**:
 
 ```ts
@@ -235,7 +239,6 @@ POST /games
   players: [
     {
       name: string,
-      key: string,
     },
   ],
 }
@@ -246,11 +249,39 @@ POST /games
 
 ```ts
 {
-  stateEventsHref: string,
+  rows: number,
+  cols: number,
+  teleporting: boolean,
+  snakes: [
+    {
+      name: string,
+      head: {
+        x: number,
+        y: number,
+      },
+      tail: [
+        {
+          x: number,
+          y: number,
+        },
+      ],
+      facing: string,
+    },
+  ],
+  foods: [
+    {
+      x: number,
+      y: number,
+    },
+  ],
 }
 ```
 
 ### Get game state
+
+Gets a game instace's state by id.
+Fails if there's no game with that id.
+Returns the current game state.
 
 **Endpoint**:
 
@@ -333,7 +364,52 @@ data: {
 }
 ```
 
+### Add snake
+
+Adds a snake to a game by id.
+Fails if any of the configuration parameters are invalid.
+Returns the initial snake state.
+
+**Endpoint**:
+
+```ts
+POST /games/{id}/snakes
+```
+
+**Parameters**:
+
+```ts
+{
+  name: string,
+}
+```
+
+**Returns**:
+200 OK
+
+```ts
+{
+  name: string,
+  head: {
+    x: number,
+    y: number,
+  },
+  tail: [
+    {
+      x: number,
+      y: number,
+    },
+  ],
+  facing: string,
+}
+```
+
 ### Manipulate snake
+
+Updates a snake's state by name from a game by id.
+Fails if there's no game with that id.
+Fails if there's no snake with that name in that game.
+Returns the current snake state.
 
 **Endpoint**:
 
@@ -368,3 +444,18 @@ PUT /games/{id}/snakes/{name}
   facing: string,
 }
 ```
+
+### Remove snake
+
+Removes a snake by name from a game by id.
+Fails if there's no game with that id.
+Fails if there's no snake with that name in that game.
+
+**Endpoint**:
+
+```ts
+DELETE /games/{id}/snakes/{name}
+```
+
+**Returns**:
+204 NO CONTENT
