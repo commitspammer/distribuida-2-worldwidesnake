@@ -144,3 +144,72 @@ DELETE /game/snakes/{name}
 
 **Returns**:
 204 NO CONTENT
+
+## Username Web Service
+
+### Register username
+
+Registers a new username.
+Fails if that username is already registered.
+Returns that username and its authorization token.
+
+**Endpoint**:
+
+```ts
+POST /usernames
+```
+
+**Parameters**:
+
+```ts
+{
+  username: string,
+}
+```
+
+**Returns**:
+201 CREATED
+
+```ts
+{
+  username: string,
+  token: string,
+}
+```
+
+### Find username
+
+Finds a username by token.
+Fails if that authorizatoin token doesn't map to any username.
+Returns that username and its authorization token.
+
+**Endpoint**:
+
+```ts
+GET /usernames/{token}
+```
+
+**Returns**:
+200 OK
+
+```ts
+{
+  username: string,
+  token: string,
+}
+```
+
+### Unregister username
+
+Unregisters an existing username.
+Fails if that username isn't registered.
+Fails if that authorization token doesn't map to that username.
+
+**Endpoint**:
+
+```ts
+DELETE /usernames/{token}
+```
+
+**Returns**:
+204 NO CONTENT

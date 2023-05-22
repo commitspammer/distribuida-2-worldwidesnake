@@ -16,6 +16,8 @@
         nativeBuildInputs = with pkgs; [
           gradle
           jdk17
+          nodejs-19_x
+          nodePackages_latest.parcel-bundler
         ];
         # buildInputs = with pkgs; [
         # ];
