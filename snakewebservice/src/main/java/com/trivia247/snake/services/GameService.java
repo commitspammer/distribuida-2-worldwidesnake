@@ -2,6 +2,8 @@ package com.trivia247.snake.services;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.ConcurrentModificationException;
@@ -21,7 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class GameService {
 
 	private Map<Integer, GameState> games = new HashMap<>();
-	private Map<Integer, SseEmitter> emitters = new HashMap<>();
+	private Map<Integer, List<SseEmitter>> emitters = new HashMap<>();
 	//private Map<String, String> tokensToPlayers = new HashMap<>(); //no use yet
 	private Ticker ticker;
 
@@ -78,9 +80,12 @@ public class GameService {
 
 	public SseEmitter getGameSseEmitterById(Integer id) {
 		if (games.containsKey(id)) {
+			if (!emitters.containsKey(id))
+				emitters.put(id, new ArrayList<SseEmitter>());
 			SseEmitter emitter = new SseEmitter(-1L);
-			emitters.put(id, emitter);
-			return emitters.get(id);
+			//emitter.onCompletion(() -> {/* remove itself from emitters list */});
+			emitters.get(id).add(emitter);
+			return emitter;
 		} else {
 			return null;
 		}
@@ -94,15 +99,17 @@ public class GameService {
 			while (true) {
 				try {
 					games.values().forEach(game -> game.tick());
-					emitters.forEach((id, emitter) -> {
-						try {
-							GameState game = games.get(id);
-							emitter.send(SseEmitter.event().name("newState").data(
-										game.toDTO()
-							));
-						} catch (Exception e) {
-							emitter.completeWithError(e);
-						}
+					emitters.forEach((id, list) -> {
+						list.forEach(emitter -> {
+							try {
+								GameState game = games.get(id);
+								emitter.send(SseEmitter.event().name("newState").data(
+											game.toDTO()
+								));
+							} catch (Exception e) {
+								emitter.completeWithError(e);
+							}
+						});
 					});
 					Thread.sleep(ms);
 				} catch (ConcurrentModificationException e) {
