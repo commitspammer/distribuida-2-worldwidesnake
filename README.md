@@ -213,3 +213,158 @@ DELETE /usernames/{token}
 
 **Returns**:
 204 NO CONTENT
+
+## Snake Game Web Service
+
+### Create game
+
+**Endpoint**:
+
+```ts
+POST /games
+```
+
+**Parameters**:
+
+```ts
+{
+  rows: string,
+  cols: string,
+  teleporting: boolean,
+  foodCount: number,
+  players: [
+    {
+      name: string,
+      key: string,
+    },
+  ],
+}
+```
+
+**Returns**:
+200 OK
+
+```ts
+{
+  stateEventsHref: string,
+}
+```
+
+### Get game state
+
+**Endpoint**:
+
+```ts
+GET /games/{id}
+```
+
+**Returns**:
+200 OK
+
+```ts
+{
+  rows: number,
+  cols: number,
+  teleporting: boolean,
+  snakes: [
+    {
+      name: string,
+      head: {
+        x: number,
+        y: number,
+      },
+      tail: [
+        {
+          x: number,
+          y: number,
+        },
+      ],
+      facing: string,
+    },
+  ],
+  foods: [
+    {
+      x: number,
+      y: number,
+    },
+  ],
+}
+```
+
+### Subscribe for game events
+
+**Endpoint**:
+
+```ts
+GET /games/{id}/events
+```
+
+**Returns**:
+Server-Sent Events
+
+```ts
+event: newstate
+data: {
+  rows: number,
+  cols: number,
+  teleporting: boolean,
+  snakes: [
+    {
+      name: string,
+      head: {
+        x: number,
+        y: number,
+      },
+      tail: [
+        {
+          x: number,
+          y: number,
+        },
+      ],
+      facing: string,
+    },
+  ],
+  foods: [
+    {
+      x: number,
+      y: number,
+    },
+  ],
+}
+```
+
+### Manipulate snake
+
+**Endpoint**:
+
+```ts
+PUT /games/{id}/snakes/{name}
+```
+
+**Parameters**:
+
+```ts
+{
+  facing: string,
+}
+```
+
+**Returns**:
+200 OK
+
+```ts
+{
+  name: string,
+  head: {
+    x: number,
+    y: number,
+  },
+  tail: [
+    {
+      x: number,
+      y: number,
+    },
+  ],
+  facing: string,
+}
+```
