@@ -2,6 +2,8 @@
 
 Note: All of the following service specifications are suggestions at best, and may be modified as seen fit.
 
+![Web Service Architecture](worldwidesnake-architecture.png)
+
 ## API Gateway
 
 ### Register snake
