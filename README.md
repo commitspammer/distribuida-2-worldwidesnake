@@ -324,6 +324,9 @@ GET /games/{id}
 
 ### Subscribe for game events
 
+Allows listening to game state updates.
+Returns an endless text stream of "newstate" events.
+
 **Endpoint**:
 
 ```ts
@@ -364,7 +367,7 @@ data: {
 }
 ```
 
-### Add snake
+### Add snake to game
 
 Adds a snake to a game by id.
 Fails if any of the configuration parameters are invalid.
@@ -404,7 +407,7 @@ POST /games/{id}/snakes
 }
 ```
 
-### Manipulate snake
+### Manipulate snake in game
 
 Updates a snake's state by name from a game by id.
 Fails if there's no game with that id.
@@ -445,7 +448,7 @@ PUT /games/{id}/snakes/{name}
 }
 ```
 
-### Remove snake
+### Remove snake from game
 
 Removes a snake by name from a game by id.
 Fails if there's no game with that id.
