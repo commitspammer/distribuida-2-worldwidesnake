@@ -1,6 +1,6 @@
 # WorldWideSnake
 
-Note: All of the following service specifications are suggestions at best, and may be modified as seen fit.
+A distributed web application for a multiplayer Snake Game, implemented with REST, Spring web services and Kaboom.js.
 
 ![Web Service Architecture](worldwidesnake-architecture.png)
 
